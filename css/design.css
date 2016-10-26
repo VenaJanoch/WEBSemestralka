@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+
+
+.Prihlaseni{
+	width: 60%;
+	margin-left:15%;
+}
+
+.Registrace{
+	color: #458B74;
+	 
+}
+.povine{
+	color:red;
+}
+.odkazMenu{
+	color: #912CEE;
+}
+
+p{
+	font-size: 20px;
+}
+
+.footer{
+	font-style: italic;
+	background-color: rgb(40,168,165);
+	border-radius: 0 0 25px 25px;
+	
+}
