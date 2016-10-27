@@ -8,43 +8,44 @@ if (! isset ( $glob_uzivatel )) {
 	
 	$text = '<div class = "Prihlaseni">
 		
-			<form action="index.php?web=form/kontrola_registrace" method="post" class="form-horizontal" role="form">
-				<legend>Registrace uzivatele </legend>
+			<form action="index.php?web=form/kontrola_registrace" method="post" class="form-horizontal">
+			<fieldset>		
+			<legend>Registrace uzivatele </legend>
  				<p class = "povine">Udaje oznacene * jsou povinne </p>
  <div class="form-group">
     <label class="control-label col-sm-2" for="login">Login*:</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="uzJmeno" placeholder="Uzivatelske jmeno" required>
+      <input type="text" class="form-control" id="login" name="uzJmeno" placeholder="Uzivatelske jmeno" required>
     </div>
   </div>
  <div class="form-group">
     <label class="control-label col-sm-2" for="jmeno">Jmeno:</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="jmeno" placeholder="Jmeno">
+      <input type="text" class="form-control" id="jmeno" name="jmeno" placeholder="Jmeno">
     </div>
   </div>
 	<div class="form-group">
     <label class="control-label col-sm-2" for="prijmeni">Prijmeni:</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="prijmeni" placeholder="Prijmeni">
+      <input type="text" class="form-control"  id="prijmeni" name="prijmeni" placeholder="Prijmeni">
     </div>
   </div>
  <div class="form-group">
     <label class="control-label col-sm-2" for="mail">E-mail:</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="mail" placeholder="Zadejte E-mail">
+      <input type="text" class="form-control"  id="mail" name="mail" placeholder="Zadejte E-mail">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="pwd">Heslo*:</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" name="pwd" placeholder="Zadejte heslo" required>
+      <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Zadejte heslo" required>
     </div>
   </div>
 <div class="form-group">
     <label class="control-label col-sm-2" for="pwd2">Kontrola hesla*:</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" name="pwd2" placeholder="Zadejte heslo znovu" required>
+      <input type="password" class="form-control" id="pwd2" name="pwd2" placeholder="Zadejte heslo znovu" required>
     </div>
   </div>
   <div class="form-group">
@@ -52,6 +53,8 @@ if (! isset ( $glob_uzivatel )) {
       <button type="submit" class="btn btn-default">Registrovat</button>
     </div>
   </div>
+			
+			</fieldset>	
 </form></div>
 			';
 } else {
