@@ -2,7 +2,7 @@
 
 body {
 	background-image: url("../img/02-01.jpg");
-	background-color: rgb(1, 52, 83);
+	background-color: gb(1, 52, 83)d;
 	background-attachment: scroll;
 	background-repeat: no-repeat;
 }

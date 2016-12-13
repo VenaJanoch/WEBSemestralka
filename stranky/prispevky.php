@@ -17,16 +17,35 @@ $description = 'Příspěvky stránka naší konference';
 $tags = 'Příspěvky, databáze';
 
 $aktivni = 'prispevky';
-
+$text="";
  if (!isset($glob_uzivatel)){
-	 $text = '<h3 class = "povine">Pokud chcete příspěvky upravovat, musíte se přihlásit.</h3>';
+	 
+	 $prispevky = $db->vratSchvalenePrispevky();
+	
+	 if($prispevky != null){
+	 $text = '<div class = "Prihlaseni"><table class="table table-striped table-bordered table-condensed">';
+	 $text .= '<thead><tr><th>Název</th></tr></thead><tbody>';
+	 
+	 // For cyklus pro zobrazeni vsech prispevku do tabulky
+	 foreach ($prispevky as $item){
+	 
+	 	$rel = 'index.php?web=stranky/stahnout&amp;file=' . $item ["soubor"];
+	 	 
+	 	$text .= '<tr><td><a class="Registrace" href="' . $rel . '">' . $item["nazev"] . '</a></td></tr>';
+	 }
+	 // konec tabulky
+	 $text .= '</tbody></table></div>';
+	 
+	 }else{
+	 	$text = '<h3 class = "povine">Pokud chcete příspěvky upravovat, musíte se přihlásit.</h3>';
+	 	
+	 }
  }
  // uživatel je přihlášen
  else {
-	$pravo = $db->vratPravoUzivatele($glob_uzivatel)["Janoch_ID_prav"]; 
+	$pravo = $db->vratPravoUzivatele($glob_uzivatel)["Janoch_prava_ID_prav"]; 
 	if ($pravo == '1'){ //administrátor
-		
-		$prispevky_items = $db->vratVsechnyPrispevky();
+	$prispevky_items = $db->vratVsechnyPrispevky();
 		
 		if ($prispevky_items == null){ //žádné příspěvky k zobrazení
 			$text = '<h1 class = "Registrace">Žádné příspěvky k zobrazení.</p>';
@@ -76,7 +95,7 @@ $aktivni = 'prispevky';
 					// recenze nebyla napsána - sloupečky se smrsknou do jednoho s nápisem Přidělit recenzi
 					if ($recenze[$i] == null){
 						$select_name = $item["ID_prispevku"];
-						$recenzenti_select = '<td><form action="index.php?web=form/kontrola_pridatRev" method="post"><select name="'.$select_name.'" required>';
+						$recenzenti_select = '<td><form action="index.php?web=form/kontrola_pridatRev" method="post"><select name="'.$select_name.'" >';
 						
 						// vytvoření selectu recenzentů
 						foreach ($recenzenti as $recenzent){
@@ -92,7 +111,7 @@ $aktivni = 'prispevky';
 					// recenze byla napsána - zobrazíme její výsledky a průměr výsledků + možnost jí smazat
 					else {
 						
-						$recenzent = $db->vratUzivatelePodleId($recenze[$i]["Janoch_uzivatel_ID_uzivatel"]);
+						$recenzent = $db->vratUzivatelePodleId($recenze[$i]["janoch_uzivatel_ID_uzivatel"]);
 						
 						$prumer = ($recenze[$i]["originalita"] * 1 + $recenze[$i]["tema"] * 1 + $recenze[$i]["technicka_kvalita"] * 2 + $recenze[$i]["jazykova_kvalita"] * 2 + $recenze[$i]["doporuceni"] * 3) / (1 + 1 + 2 + 2 + 3);
 				
@@ -101,7 +120,7 @@ $aktivni = 'prispevky';
 							$prumer = null;
 						}
 						
-						$text .= '<td>' . $recenzent["Jmeno"] . '</td><td>'.$recenze[$i]["originalita"].'</td><td>'.$recenze[$i]["tema"].'</td><td>'.$recenze[$i]["technicka_kvalita"].'</td><td>'.$recenze[$i]["jazykova_kvalita"].'</td><td>'.$recenze[$i]["doporuceni"].'</td><td>'.$prumer.'</td><td><a class="povine"href="index.php?web=stranky/smazRev&amp;id_pr='.$recenze[$i]["janoch_prispevky_ID_prispevku"].'&amp;id_rv='.$recenze[$i]["Janoch_uzivatel_ID_uzivatel"].'">Smazat</a></td>';
+						$text .= '<td>' . $recenzent["Jmeno"] . '</td><td>'.$recenze[$i]["originalita"].'</td><td>'.$recenze[$i]["tema"].'</td><td>'.$recenze[$i]["technicka_kvalita"].'</td><td>'.$recenze[$i]["jazykova_kvalita"].'</td><td>'.$recenze[$i]["doporuceni"].'</td><td>'.$prumer.'</td><td><a class="povine"href="index.php?web=stranky/smazRev&amp;id_pr='.$recenze[$i]["janoch_prispevky_ID_prispevku"].'&amp;id_rv='.$recenze[$i]["janoch_uzivatel_ID_uzivatel"].'">Smazat</a></td>';
 						
 						
 						
@@ -119,25 +138,25 @@ $aktivni = 'prispevky';
 							$text .= '<td rowspan="3"><a href="index.php?web=stranky/rozhodnuti&amp;id='.$item["ID_prispevku"].'" class="Registrace">'.$rozhodnuti.'</a></td></tr>';
 						}
 						else{
-							$text .= '</tr>';
+							$text .= '</tr><tr>';
 						}
 				}
 				
 				
 			}
 			// konec tabulky
-			$text .= "</tbody></table>";
+			$text .= '</tr></tbody></table><br/><a href="index.php?web=stranky/uzivatele" class="odkazMenu">Uzivatele</a>';
 		
 		}
 		
 	
 	}
 	
+	
 	elseif ($pravo == '2'){ // recenzent
 		
-		
 		$recenze = $db->vratRecenzePodleRecenzenta($db->vratIdUzivatele($glob_uzivatel)["id"]);
-		
+		$text = '';
 		if ($recenze == null){ // žádné příspěvky k posouzení
 			$text = '<h1 class="Registrace">Žádné příspěvky k zobrazení.</h1>';
 		}
@@ -174,13 +193,15 @@ $aktivni = 'prispevky';
 	elseif ($pravo == '3'){ // autor
 		
 		$id = $db->vratIdUzivatele($glob_uzivatel);
+		
 		$prispevky_items = $db->vratPrispevkyAutor($id["id"]);
 		//Vetev pro zadne prispevky
+	
 		if ($prispevky_items == null){ 
 			$text = '<h3>
 					Žádné příspěvky k zobrazení.</h3>
 					<p><a class = "Registrace" href="index.php?web=stranky/novy_prispevek">Přidat nový příspěvěk</a></p>';
-		
+	
 		}
 		//Vetev pro vypis prispevku
 		else{
@@ -197,7 +218,7 @@ $aktivni = 'prispevky';
 				$text .= '<tr><td><a class="Registrace" href="' . $rel2 . '">' . $item["nazev"] . '</a></td><td><a class="povine" href="' . $rel . '"> Odstranit</a> </td></tr>';
 			}
 			// konec tabulky
-			$text .= '</tbody></table></p><p ><a href="index.php?web=stranky/novy_prispevek" class ="Registrace">Přidat nový příspěvěk</a></div>';
+			$text .= '</tbody></table><p ><a href="index.php?web=stranky/novy_prispevek" class ="Registrace">Přidat nový příspěvěk</a></p></div>';
 				
 		}
 		

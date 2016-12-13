@@ -14,7 +14,7 @@ CREATE TABLE janoch_uzivatel
     Login          VARCHAR (40) ,
     Heslo          VARCHAR (35) ,
     Email          VARCHAR (35) ,
-    Janoch_prava_ID_prav INTEGER,
+    janoch_prava_ID_prav INTEGER,
     PRIMARY KEY ( ID_uzivatel )
   ) ;
 
@@ -48,27 +48,27 @@ CREATE TABLE janoch_prispevky
     PRIMARY KEY ( ID_prispevku )
   ) ;
   
-INSERT INTO `janochweb.bo8676`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Vaclav', 'Janoch', 'Venous', 'janoch1', NULL, '1');
-INSERT INTO `janochweb.bo8676`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Filip', 'Zibar', 'Fista', 'janoch1', NULL, '2');
-INSERT INTO `janochweb.bo8676`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Roman', 'Vitek', 'Romanek', 'janoch1', NULL, '2');
-INSERT INTO `janochweb.bo8676`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Lukas', 'Brejcha', 'Luky', 'janoch1', NULL, '2');
-INSERT INTO `janochweb.bo8676`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Tomas', 'Voracek', 'Vory', 'janoch1', NULL, '3');
-INSERT INTO `janochweb.bo8676`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Marek', 'Baran', 'Parek', 'janoch1', NULL, '3');
-INSERT INTO `janochweb.bo8676`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Robin', 'Biker', 'Rob', 'janoch1', NULL, '3');
+INSERT INTO `mojedatabase`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Vaclav', 'Janoch', 'Venous', 'janoch1', NULL, '1');
+INSERT INTO `mojedatabase`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Filip', 'Zibar', 'Fista', 'janoch1', NULL, '2');
+INSERT INTO `mojedatabase`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Roman', 'Vitek', 'Romanek', 'janoch1', NULL, '2');
+INSERT INTO `mojedatabase`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Lukas', 'Brejcha', 'Luky', 'janoch1', NULL, '2');
+INSERT INTO `mojedatabase`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Tomas', 'Voracek', 'Vory', 'janoch1', NULL, '3');
+INSERT INTO `mojedatabase`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Marek', 'Baran', 'Parek', 'janoch1', NULL, '3');
+INSERT INTO `mojedatabase`.`janoch_uzivatel` (`ID_uzivatel`, `Jmeno`, `Prijmeni`, `Login`, `Heslo`, `Email`, `Janoch_prava_ID_prav`) VALUES ('null', 'Robin', 'Biker', 'Rob', 'janoch1', NULL, '3');
 
-INSERT INTO `janochweb.bo8676`.`janoch_prispevky` (`ID_prispevku`, `nazev`, `autori`, `abstract`, `soubor`, `prijato`, `janoch_uzivatel_ID_uzivatel`) VALUES ('null', 'ZeleznaSparta3', 'Voracek', NULL, 'soubory/Fista/zadani-sp.pdf', 'NE', '5');
-INSERT INTO `janochweb.bo8676`.`janoch_prispevky` (`ID_prispevku`, `nazev`, `autori`, `abstract`, `soubor`, `prijato`, `janoch_uzivatel_ID_uzivatel`) VALUES ('null', 'Sparta vecna zustane', 'Voracek', NULL, 'soubory/Fista/zadani-sp.pdf', 'NE', '5');
-INSERT INTO `janochweb.bo8676`.`janoch_prispevky` (`ID_prispevku`, `nazev`, `autori`, `abstract`, `soubor`, `prijato`, `janoch_uzivatel_ID_uzivatel`) VALUES ('null', 'Viktora', 'Baran', NULL, 'soubory/Fista/zadani-sp.pdf', 'NE', '6');
-INSERT INTO `janochweb.bo8676`.`janoch_prispevky` (`ID_prispevku`, `nazev`, `autori`, `abstract`, `soubor`, `prijato`, `janoch_uzivatel_ID_uzivatel`) VALUES ('null', 'Nova Slavia', 'Biker', NULL, 'soubory/Fista/zadani-sp.pdf', 'NE', '7');
+INSERT INTO `mojedatabase`.`janoch_prispevky` (`ID_prispevku`, `nazev`, `autori`, `abstract`, `soubor`, `prijato`, `janoch_uzivatel_ID_uzivatel`) VALUES ('null', 'ZeleznaSparta3', 'Voracek', NULL, 'soubory/Fista/zadani-sp.pdf', 'NE', '5');
+INSERT INTO `mojedatabase`.`janoch_prispevky` (`ID_prispevku`, `nazev`, `autori`, `abstract`, `soubor`, `prijato`, `janoch_uzivatel_ID_uzivatel`) VALUES ('null', 'Sparta vecna zustane', 'Voracek', NULL, 'soubory/Fista/zadani-sp.pdf', 'NE', '5');
+INSERT INTO `mojedatabase`.`janoch_prispevky` (`ID_prispevku`, `nazev`, `autori`, `abstract`, `soubor`, `prijato`, `janoch_uzivatel_ID_uzivatel`) VALUES ('null', 'Viktora', 'Baran', NULL, 'soubory/Fista/zadani-sp.pdf', 'NE', '6');
+INSERT INTO `mojedatabase`.`janoch_prispevky` (`ID_prispevku`, `nazev`, `autori`, `abstract`, `soubor`, `prijato`, `janoch_uzivatel_ID_uzivatel`) VALUES ('null', 'Nova Slavia', 'Biker', NULL, 'soubory/Fista/zadani-sp.pdf', 'NE', '7');
 
-INSERT INTO `janochweb.bo8676`.`janoch_hodnoceni` (`janoch_uzivatel_ID_uzivatel`, `janoch_prispevky_ID_prispevku`, `originalita`, `tema`, `technicka_kvalita`, `jazykova_kvalita`, `doporuceni`, `poznamky`) VALUES ('2', '1', '4', '5', '2', '3', '1', NULL);
-INSERT INTO `janochweb.bo8676`.`janoch_hodnoceni` (`janoch_uzivatel_ID_uzivatel`, `janoch_prispevky_ID_prispevku`, `originalita`, `tema`, `technicka_kvalita`, `jazykova_kvalita`, `doporuceni`, `poznamky`) VALUES ('3', '3', '4', '1', '3', '3', '2', NULL);
-INSERT INTO `janochweb.bo8676`.`janoch_hodnoceni` (`janoch_uzivatel_ID_uzivatel`, `janoch_prispevky_ID_prispevku`, `originalita`, `tema`, `technicka_kvalita`, `jazykova_kvalita`, `doporuceni`, `poznamky`) VALUES ('4', '4', '5', '5', '2', '3', '1', NULL);
-INSERT INTO `janochweb.bo8676`.`janoch_hodnoceni` (`Janoch_uzivatel_ID_uzivatel`, `janoch_prispevky_ID_prispevku`, `originalita`, `tema`, `technicka_kvalita`, `jazykova_kvalita`, `doporuceni`, `poznamky`) VALUES ('2', '2', '4', '5', '2', '3', '4', NULL);
+INSERT INTO `mojedatabase`.`janoch_hodnoceni` (`janoch_uzivatel_ID_uzivatel`, `janoch_prispevky_ID_prispevku`, `originalita`, `tema`, `technicka_kvalita`, `jazykova_kvalita`, `doporuceni`, `poznamky`) VALUES ('2', '1', '4', '5', '2', '3', '1', NULL);
+INSERT INTO `mojedatabase`.`janoch_hodnoceni` (`janoch_uzivatel_ID_uzivatel`, `janoch_prispevky_ID_prispevku`, `originalita`, `tema`, `technicka_kvalita`, `jazykova_kvalita`, `doporuceni`, `poznamky`) VALUES ('3', '3', '4', '1', '3', '3', '2', NULL);
+INSERT INTO `mojedatabase`.`janoch_hodnoceni` (`janoch_uzivatel_ID_uzivatel`, `janoch_prispevky_ID_prispevku`, `originalita`, `tema`, `technicka_kvalita`, `jazykova_kvalita`, `doporuceni`, `poznamky`) VALUES ('4', '4', '5', '5', '2', '3', '1', NULL);
+INSERT INTO `mojedatabase`.`janoch_hodnoceni` (`Janoch_uzivatel_ID_uzivatel`, `janoch_prispevky_ID_prispevku`, `originalita`, `tema`, `technicka_kvalita`, `jazykova_kvalita`, `doporuceni`, `poznamky`) VALUES ('2', '2', '4', '5', '2', '3', '4', NULL);
 
-INSERT INTO `janochweb.bo8676`.`janoch_prava` (`ID_prav`, `nazev`) VALUES ('1', 'Admin');
-INSERT INTO `janochweb.bo8676`.`janoch_prava` (`ID_prav`, `nazev`) VALUES ('2', 'Recenzent');
-INSERT INTO `janochweb.bo8676`.`janoch_prava` (`ID_prav`, `nazev`) VALUES ('3', 'Autor');
+INSERT INTO `mojedatabase`.`janoch_prava` (`ID_prav`, `nazev`) VALUES ('1', 'Admin');
+INSERT INTO `mojedatabase`.`janoch_prava` (`ID_prav`, `nazev`) VALUES ('2', 'Recenzent');
+INSERT INTO `mojedatabase`.`janoch_prava` (`ID_prav`, `nazev`) VALUES ('3', 'Autor');
 -- Oracle SQL Developer Data Modeler Summary Report: 
 -- 
 -- CREATE TABLE                             4

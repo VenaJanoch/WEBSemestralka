@@ -125,9 +125,7 @@ else {
 	$db->vlozUzivatele($novy_uzivatel);
 
 
-	$pr->prihlasUzivatele($novy_uzivatel["Jmeno"], $novy_uzivatel["Heslo"]);
-	$glob_uzivatel = $pr->kontrolaPrihlaseni();
-
+	
 	$text = "<p>Registrace proběhla úspěnšně</p>";
 }
 

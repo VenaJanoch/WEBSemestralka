@@ -35,10 +35,14 @@ class databaze {
 	 *        	rozhodnutí, na které se rozhodnutí u příspěvku změní
 	 */
 	function zmenRozhodnuti($id_prispevku, $rozhodnuti) {
-		$query = "UPDATE janoch_prispevky SET prijato='" . $rozhodnuti . "' WHERE ID_prispevku='" . $id_prispevku . "';";
+		$query = "UPDATE janoch_prispevky SET prijato=:rozhodnuti WHERE ID_prispevku=:id_prispevku;";
 		
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
+		$params = array(':rozhodnuti' => $rozhodnuti, ':id_prispevku' => $id_prispevku);
+		
+		if(!$statement->execute($params)){
+			return null;
+		}
 	}
 	
 	/**
@@ -50,10 +54,14 @@ class databaze {
 	 *        	id uživatele
 	 */
 	function smazRecenzi($id_prispevku, $id_uzivatele) {
-		$query = "DELETE FROM janoch_hodnoceni WHERE janoch_uzivatel_ID_uzivatel='" . $id_uzivatele . "' AND janoch_prispevky_ID_prispevku='" . $id_prispevku . "';";
+		$query = "DELETE FROM janoch_hodnoceni WHERE janoch_uzivatel_ID_uzivatel =:id_uzivatele AND janoch_prispevky_ID_prispevku=:id_prispevku;";
 		
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
+		$params = array(':id_uzivatele' => $id_uzivatele, ':id_prispevku' => $id_prispevku);
+		
+		if(!$statement->execute($params)){
+			return null;
+		}
 	}
 	
 	/**
@@ -64,27 +72,15 @@ class databaze {
 	 * @return int id nove recenze
 	 */
 	function vytvorRecenzi($nova_recenze) {
-		$insert_columns = "";
-		$insert_values = "";
 		
-		if ($nova_recenze != null) {
+		$stmt_text = "INSERT INTO janoch_hodnoceni (janoch_uzivatel_ID_uzivatel,janoch_prispevky_ID_prispevku
+				,originalita,tema,technicka_kvalita,jazykova_kvalita,doporuceni,poznamky) VALUES (?,?);";
 			
-			foreach ( $nova_recenze as $column => $value ) {
-				
-				if ($insert_columns != "")
-					$insert_columns .= ", ";
-				if ($insert_columns != "")
-					$insert_values .= ", ";
-				
-				$insert_columns .= "$column";
-				$insert_values .= "'$value'";
-			}
-		}
-		
-		$stmt_text = "INSERT INTO janoch_hodnoceni ($insert_columns) VALUES ($insert_values);";
 		$stmt = $this->connection->prepare ( $stmt_text );
+		$stmt->execute(array($nova_recenze['Janoch_uzivatel_ID_uzivatel'],$nova_recenze['janoch_prispevky_ID_prispevku']));
 		
-		$stmt->execute ();
+		
+		
 		
 		// tohle by urcilo ID typu auto increment pro prave vlozeny predmet
 		$item_id = $this->connection->lastInsertId ();
@@ -97,12 +93,13 @@ class databaze {
 	 * @return array všichni recenzenti v databázi
 	 */
 	function vratRecenzenty() {
-		$query = "SELECT jmeno, ID_uzivatel FROM janoch_uzivatel WHERE janoch_prava_ID_prav='2';";
+		$query = "SELECT jmeno, ID_uzivatel FROM janoch_uzivatel WHERE Janoch_prava_ID_prav='2';";
 		$statement = $this->connection->prepare ( $query );
 		$statement->execute ();
 		
-		$rtn = $statement->fetchAll ( PDO::FETCH_ASSOC );
-		return $rtn;
+		$pole = $statement->fetchAll();
+        
+		return isset($pole) ? $pole : null;
 	}
 	
 	/**
@@ -113,10 +110,13 @@ class databaze {
 	 * @return array všchny recenzentovi recenze
 	 */
 	function vratRecenzePodleRecenzenta($id_uzivatele) {
-		$query = "SELECT * FROM janoch_hodnoceni WHERE janoch_uzivatel_ID_uzivatel='" . $id_uzivatele . "';";
-		
+		$query = "SELECT * FROM janoch_hodnoceni WHERE janoch_uzivatel_ID_uzivatel=:id_uzivatel;";
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
+		$params = array(':id_uzivatel' => $id_uzivatele);
+		
+		if(!$statement->execute($params)){
+			return null;
+		}
 		
 		$rtn = $statement->fetchAll ( PDO::FETCH_ASSOC );
 		return $rtn;
@@ -130,11 +130,14 @@ class databaze {
 	 * @return array všechny recenze tohoto příspěvku
 	 */
 	function vratRecenzePodlePrispevku($id_prispevku) {
-		$query = "SELECT * FROM janoch_hodnoceni WHERE janoch_prispevky_ID_prispevku='" . $id_prispevku . "';";
+		$query = "SELECT * FROM janoch_hodnoceni WHERE janoch_prispevky_ID_prispevku=:id_prispevku;";
 		
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
+		$params = array(':id_prispevku' => $id_prispevku);
 		
+		if(!$statement->execute($params)){
+			return null;
+		}
 		$rtn = $statement->fetchAll ( PDO::FETCH_ASSOC );
 		return $rtn;
 	}
@@ -149,10 +152,14 @@ class databaze {
 	 *        	$return array recenze
 	 */
 	function vratRecenzi($id_prispevku, $id_uzivatele) {
-		$query = "SELECT * FROM janoch_hodnoceni WHERE janoch_prispevky_ID_prispevku='" . $id_prispevku . "' AND janoch_uzivatel_ID_uzivatel='" . $id_uzivatele . "';";
+		$query = "SELECT * FROM janoch_hodnoceni WHERE janoch_prispevky_ID_prispevku=:id_prispevku AND janoch_uzivatel_ID_uzivatel=:id_uzivatele;";
 		
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
+		$params = array(':id_uzivatele' => $id_uzivatele, ':id_prispevku' => $id_prispevku);
+		
+		if(!$statement->execute($params)){
+			return null;
+		}
 		
 		$rtn = $statement->fetch ();
 		return $rtn;
@@ -166,10 +173,14 @@ class databaze {
 	 * @return array příspěvek
 	 */
 	function vratPrispevek($id) {
-		$query = "SELECT * FROM janoch_prispevky WHERE id_prispevku='" . $id . "';";
+		$query = "SELECT * FROM janoch_prispevky WHERE id_prispevku=:id ;";
 		
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
+		$params = array(':id' => $id);
+		
+		if(!$statement->execute($params)){
+			return null;
+		}
 		
 		$rtn = $statement->fetch ();
 		return $rtn;
@@ -183,11 +194,14 @@ class databaze {
 	 * @return array cesta k souboru
 	 */
 	function vratSoubor($id_prispevku) {
-		$query = "SELECT soubor FROM janoch_prispevky WHERE ID_prispevku='" . $id_prispevku . "';";
+		$query = "SELECT soubor FROM janoch_prispevky WHERE ID_prispevku=:id_prispevku;";
 		
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
+		$params = array(':id_prispevku' => $id_prispevku);
 		
+		if(!$statement->execute($params)){
+			return null;
+		}
 		$rtn = $statement->fetch ();
 		return $rtn;
 	}
@@ -199,8 +213,7 @@ class databaze {
 	 *        	pole upravených hodnot recenze
 	 */
 	function upravRecenzi($upravena_recenze) {
-		$query = "UPDATE janoch_hodnoceni SET originalita='" . $upravena_recenze ["originalita"] . "', tema='" . $upravena_recenze ["tema"] . "', technicka_kvalita='" . $upravena_recenze ["technicka_kvalita"] . "', jazykova_kvalita='" . $upravena_recenze ["jazykova_kvalita"] . "', doporuceni='" . $upravena_recenze ["doporuceni"] . "', poznamky='" . $upravena_recenze ["poznamky"] . "' WHERE janoch_prispevky_ID_prispevku='" . $upravena_recenze ["janoch_prispevky_ID_prispevku"] . "' AND Janoch_uzivatel_ID_uzivatel='" . $upravena_recenze ["Janoch_uzivatele_ID_uzivatele"] . "';";
-		echo $query;
+		$query = "UPDATE janoch_hodnoceni SET originalita='" . $upravena_recenze ["originalita"] . "', tema='" . $upravena_recenze ["tema"] . "', technicka_kvalita='" . $upravena_recenze ["technicka_kvalita"] . "', jazykova_kvalita='" . $upravena_recenze ["jazykova_kvalita"] . "', doporuceni='" . $upravena_recenze ["doporuceni"] . "', poznamky='" . $upravena_recenze ["poznamky"] . "' WHERE janoch_prispevky_ID_prispevku= '" . $upravena_recenze ["janoch_prispevky_ID_prispevku"] . "' AND janoch_uzivatel_ID_uzivatel='" . $upravena_recenze ["janoch_uzivatele_ID_uzivatele"] . "';";
 		$statement = $this->connection->prepare ( $query );
 		$statement->execute ();
 	}
@@ -225,28 +238,16 @@ class databaze {
 	 * @return int id příspěvku
 	 */
 	function vlozPrispevek($novy_prispevek) {
-		$insert_columns = "";
-		$insert_values = "";
-		
-		if ($novy_prispevek != null) {
-			
-			foreach ( $novy_prispevek as $column => $value ) {
 				
-				if ($insert_columns != "")
-					$insert_columns .= ", ";
-				if ($insert_columns != "")
-					$insert_values .= ", ";
-				
-				$insert_columns .= "$column";
-				$insert_values .= "'$value'";
-			}
-		}
-		
-		$stmt_text = "INSERT INTO janoch_prispevky ($insert_columns) VALUES ($insert_values);";
+		$stmt_text = "INSERT INTO janoch_prispevky (nazev,autori,abstract,soubor,prijato,janoch_uzivatel_ID_uzivatel) VALUES (?,?,?,?,?,?);";
+		$nazev = htmlspecialchars($novy_prispevek['nazev']);
+		$autori = htmlspecialchars($novy_prispevek['autori']);		
+		$abstract = htmlspecialchars($novy_prispevek['abstract']);
+		$soubor = htmlspecialchars($novy_prispevek['soubor']);
+		$prijato = htmlspecialchars("NE");
 		$stmt = $this->connection->prepare ( $stmt_text );
-		
-		$stmt->execute ();
-		
+		$stmt->execute(array($nazev,$autori, $abstract, $soubor, $prijato,$novy_prispevek['Janoch_uzivatel_ID_uzivatel']));
+	
 		// tohle by urcilo ID typu auto increment pro prave vlozeny predmet
 		$item_id = $this->connection->lastInsertId ();
 		return $item_id;
@@ -260,10 +261,13 @@ class databaze {
 	 * @return array uživatelovo id
 	 */
 	function vratIdUzivatele($login) {
-		$query = "SELECT ID_uzivatel AS id FROM janoch_uzivatel WHERE Login='" . $login . "';";
+		$query = "SELECT ID_uzivatel AS id FROM janoch_uzivatel WHERE Login=:login;";
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
+		$params = array(':login' => $login);
 		
+		if(!$statement->execute($params)){
+			return null;
+		}
 		$rtn = $statement->fetch ();
 		return $rtn;
 	}
@@ -276,11 +280,14 @@ class databaze {
 	 * @return array příspěvky autora
 	 */
 	function vratPrispevkyAutor($autor) {
-		$query = "SELECT * FROM janoch_prispevky WHERE janoch_uzivatel_ID_uzivatel='" . $autor . "';";
+		$query = "SELECT * FROM janoch_prispevky WHERE janoch_uzivatel_ID_uzivatel=:autor ;";
 		
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
+		$params = array(':autor' => $autor);
 		
+		if(!$statement->execute($params)){
+			return null;
+		}
 		$rtn = $statement->fetchAll ( PDO::FETCH_ASSOC );
 		return $rtn;
 	}
@@ -292,11 +299,14 @@ class databaze {
 	 *        	id příspěvku
 	 */
 	function smazPrispevek($id) {
-		$query = "DELETE FROM janoch_prispevky WHERE id_prispevku = '" . $id . "';";
+		$query = "DELETE FROM janoch_prispevky WHERE id_prispevku = :id ;";
 		
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
-	}
+		$params = array(':id' => $id);
+		
+		if(!$statement->execute($params)){
+			return null;
+		}	}
 	
 	/**
 	 * Funkce vrátí všechny příspěvky v databázi
@@ -321,12 +331,14 @@ class databaze {
 	 * @return array právo uživatele
 	 */
 	function vratPravoUzivatele($login) {
-		$query = "SELECT janoch_prava_ID_prav FROM janoch_uzivatel WHERE login='" . $login . "';";
+		$query = "SELECT Janoch_prava_ID_prav FROM janoch_uzivatel WHERE login=:login;";
 		
 		$statement = $this->connection->prepare ( $query );
+		$params = array(':login' => $login);
 		
-		$statement->execute ();
-		
+		if(!$statement->execute($params)){
+			return null;
+		}
 		$rtn = $statement->fetch ();
 		return $rtn;
 	}
@@ -339,14 +351,18 @@ class databaze {
 	 * @return array uživatel
 	 */
 	function vratUzivatelePodleId($id_uzivatele) {
-		$query = "SELECT * FROM janoch_uzivatel WHERE ID_uzivatel='" . $id_uzivatele . "';";
+		$query = "SELECT * FROM janoch_uzivatel WHERE ID_uzivatel=:id_uzivatele;";
 		
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
+		$params = array(':id_uzivatele' => $id_uzivatele);
 		
+		if(!$statement->execute($params)){
+			return null;
+		}
 		$rtn = $statement->fetch ();
 		return $rtn;
 	}
+	
 	
 	/**
 	 * Funkce vrátí uživatele dle jeho loginu a hesla
@@ -358,12 +374,28 @@ class databaze {
 	 * @return array uživatel
 	 */
 	function vratUzivatele($login, $heslo) {
-		$query = "SELECT * FROM janoch_uzivatel WHERE Login='" . $login . "' AND Heslo='" . $heslo . "';";
+		$query = "SELECT * FROM janoch_uzivatel WHERE Login=:login AND Heslo=:heslo;";
 		
 		$statement = $this->connection->prepare ( $query );
-		$statement->execute ();
+		$params = array(':login' => $login, ':heslo' => $heslo);
 		
+		if(!$statement->execute($params)){
+			return null;
+		}	
 		$rtn = $statement->fetch ();
+		return $rtn;
+	}
+	
+	function vratVsechnyUzivatele() {
+		$query = "SELECT * FROM janoch_uzivatel ;";
+	
+		$statement = $this->connection->prepare ( $query );
+	
+		if(!$statement->execute()){
+			return null;
+		}
+		$rtn = $statement->fetchAll ( PDO::FETCH_ASSOC );;
+		
 		return $rtn;
 	}
 	
@@ -376,33 +408,76 @@ class databaze {
 	 */
 	function vlozUzivatele($novy_uzivatel) {
 		
+		$stmt_text = "INSERT INTO janoch_uzivatel (Jmeno,Prijmeni, Login, Heslo, Email) VALUES (?,?,?,?,?);";
 		
-	$insert_columns = "";
-		$insert_values = "";
-		
-		if ($novy_uzivatel != null) {
-			
-			foreach ( $novy_uzivatel as $column => $value ) {
-				
-				if ($insert_columns != "")
-					$insert_columns .= ", ";
-				if ($insert_columns != "")
-					$insert_values .= ", ";
-				
-				$insert_columns .= "$column";
-				$insert_values .= "'$value'";
-			}
-		}
-		
-		$stmt_text = "INSERT INTO janoch_uzivatel ($insert_columns) VALUES ($insert_values);";
-		echo $stmt_text;
+		$jm = htmlspecialchars($novy_uzivatel['Jmeno']);
+		$pr = htmlspecialchars($novy_uzivatel['Prijmeni']);		
+		$log = htmlspecialchars($novy_uzivatel['Login']);
+		$pas = htmlspecialchars($novy_uzivatel['Heslo']);
+		$mail = htmlspecialchars($novy_uzivatel['Email']);
 		$stmt = $this->connection->prepare ( $stmt_text );
+		$stmt->execute(array($jm,$pr, $log, $pas, $mail));
 		
-		$stmt->execute ();
 		
 		// tohle by urcilo ID typu auto increment pro prave vlozeny predmet
 		$item_id = $this->connection->lastInsertId ();
 		return $item_id;
 	}
+	
+	function vratPravo($id_uzivatele){
+		$query = "SELECT janoch_prava_ID_prav FROM janoch_uzivatel WHERE ID_uzivatel=:uzivatel ;";
+		
+		$statement = $this->connection->prepare ( $query );
+		$params = array(':uzivatel' => $id_uzivatele);
+		
+		if(!$statement->execute($params)){
+			return null;
+		}	
+		$rtn = $statement->fetch();
+		return $rtn;
+	}
+	
+	
+	function vratSchvalenePrispevky(){
+		$ANO = "ANO";
+		$query = "SELECT * FROM janoch_prispevky WHERE prijato='".$ANO."';";
+		
+		$statement = $this->connection->prepare ( $query );
+		
+		if(!$statement->execute()){
+			return null;
+		}
+		$rtn = $statement->fetchAll ( PDO::FETCH_ASSOC );
+		
+		return $rtn;
+		
+	}
+	
+	
+	
+	function zmenPravo($pravo,$id_uzivatele){
+	$query = "UPDATE janoch_uzivatel SET janoch_prava_ID_prav ='" . $pravo . "' WHERE ID_uzivatel='" . $id_uzivatele . "';";
+		$statement = $this->connection->prepare ( $query );
+		$statement->execute ();
+	}
+	
+	/**
+	 * Funkce smaže uzivatele z databáze podle id
+	 *
+	 * @param int $id
+	 *        	id příspěvku
+	 */
+	function smazUzivatele($id) {
+		$query = "DELETE FROM janoch_uzivatel WHERE ID_uzivatel = :id ;";
+	
+		$statement = $this->connection->prepare ( $query );
+		$params = array(':id' => $id);
+	
+		if(!$statement->execute($params)){
+			return null;
+		}	}
+	
+	
+	
 }
 ?>

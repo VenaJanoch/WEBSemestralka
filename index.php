@@ -21,6 +21,7 @@ $dostupne = array (
 		"stranky/pokyny",
 		"stranky/terminy",
 		"stranky/prihlaseni",
+		"stranky/uzivatele",
 		"form/kontrola_prihlaseni",
 		"stranky/odhlaseni",
 		"stranky/registrace",
@@ -30,11 +31,13 @@ $dostupne = array (
 		"form/kontrola_novy_prispevek",
 		"stranky/ukazat",
 		"form/kontrola_hodnoceni",
+		"form/kontrola_uzivatel",
 		"form/kontrola_uprava_prispevku",
 		"stranky/hodnoceni",
 		"stranky/stahnout",
 		"form/kontrola_pridatRev",
 		"stranky/smazRev",
+		"stranky/smazUZ",
 		"stranky/ukazat_adm",
 		"stranky/rozhodnuti" 
 ); // dostupne stranky webu
