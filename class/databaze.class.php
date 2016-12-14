@@ -64,28 +64,6 @@ class databaze {
 		}
 	}
 	
-	/**
-	 * Funkce vytvoří novou recenzi
-	 * 
-	 * @param array $nova_recenze
-	 *        	pole udaju nove recenze
-	 * @return int id nove recenze
-	 */
-	function vytvorRecenzi($nova_recenze) {
-		
-		$stmt_text = "INSERT INTO janoch_hodnoceni (janoch_uzivatel_ID_uzivatel,janoch_prispevky_ID_prispevku
-				,originalita,tema,technicka_kvalita,jazykova_kvalita,doporuceni,poznamky) VALUES (?,?);";
-			
-		$stmt = $this->connection->prepare ( $stmt_text );
-		$stmt->execute(array($nova_recenze['Janoch_uzivatel_ID_uzivatel'],$nova_recenze['janoch_prispevky_ID_prispevku']));
-		
-		
-		
-		
-		// tohle by urcilo ID typu auto increment pro prave vlozeny predmet
-		$item_id = $this->connection->lastInsertId ();
-		return $item_id;
-	}
 	
 	/**
 	 * Funkce vrátí jméno a id všech recenzentů v databázi
@@ -162,6 +140,21 @@ class databaze {
 		}
 		
 		$rtn = $statement->fetch ();
+		return $rtn;
+	}
+	
+	
+	function vratRecenziAutor($id_prispevku) {
+		$query = "SELECT * FROM janoch_hodnoceni WHERE janoch_prispevky_ID_prispevku=:id_prispevku;";
+	
+		$statement = $this->connection->prepare ( $query );
+		$params = array(':id_prispevku' => $id_prispevku);
+	
+		if(!$statement->execute($params)){
+			return null;
+		}
+	
+		$rtn = $statement->fetchAll ();
 		return $rtn;
 	}
 	
@@ -419,6 +412,41 @@ class databaze {
 		$stmt->execute(array($jm,$pr, $log, $pas, $mail));
 		
 		
+		// tohle by urcilo ID typu auto increment pro prave vlozeny predmet
+		$item_id = $this->connection->lastInsertId ();
+		return $item_id;
+	}
+	/**
+	 * Funkce vytvoří novou recenzi
+	 *
+	 * @param array $nova_recenze
+	 *        	pole udaju nove recenze
+	 * @return int id nove recenze
+	 */
+	function vytvorRecenzi($nova_recenze) {
+	
+		$insert_columns = "";
+		$insert_values = "";
+	
+		if ($nova_recenze != null) {
+				
+			foreach ( $nova_recenze as $column => $value ) {
+	
+				if ($insert_columns != "")
+					$insert_columns .= ", ";
+					if ($insert_columns != "")
+						$insert_values .= ", ";
+	
+						$insert_columns .= "$column";
+						$insert_values .= "'$value'";
+			}
+		}
+	
+		$stmt_text = "INSERT INTO janoch_hodnoceni ($insert_columns) VALUES ($insert_values);";
+		$stmt = $this->connection->prepare ( $stmt_text );
+	
+		$stmt->execute ();
+	
 		// tohle by urcilo ID typu auto increment pro prave vlozeny predmet
 		$item_id = $this->connection->lastInsertId ();
 		return $item_id;
